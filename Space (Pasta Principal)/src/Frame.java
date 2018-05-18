@@ -21,7 +21,7 @@ public class Frame extends JFrame{
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(800,600);
         f.setResizable(false);
-        f.setTitle("Projeto");
+        f.setTitle("Spicy Invaders");
         f.setLocationRelativeTo(null);
         f.add(s);
         f.setVisible(true);
