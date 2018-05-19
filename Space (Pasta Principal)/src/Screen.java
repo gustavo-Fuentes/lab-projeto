@@ -12,41 +12,30 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class Screen extends JPanel implements KeyListener, ActionListener {
-	private BufferedImage image;
 	private BufferedImage background;
-	private Image enemy;
-	private URL url = this.getClass().getResource("spicy.png");
 	int x = 340;
 	double velx = 25;
 	int y = 440;
-	int ym = -600;
+	int ym = -300;
 	boolean dash = false;
-	ArrayList<Meteor> m = new ArrayList<>();
+	ArrayList<Enemy> enemy = new ArrayList<>();
+	Player p = new Player(x, y);
 
 	public Screen() {
-		startMeteor();
+
+		startEnemy();
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/Nave.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("/spicy_background.jpg"));
+			background = ImageIO.read(getClass().getResourceAsStream(
+					"/spicy_background.jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		try {
-			enemy = new ImageIcon(url).getImage();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		
 		int delay = 5; // milliseconds
-
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				recalcula();
@@ -59,7 +48,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		int delay2 = 1000;
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-
+				startEnemy();
 			}
 		};
 		new Timer(delay2, taskPerformer1).start();
@@ -67,30 +56,34 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	}
 
 	void recalcula() {
-		for (int i = 0; i < m.size(); i++) {
-			m.get(i).setY(ym);
+		for (int i = 0; i < enemy.size(); i++) {
+			enemy.get(i).setY(ym);
 		}
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(background, 0, 0, null);
-		g.drawImage(image, x, y, image.getWidth() / 6, image.getHeight() / 6, null);
+		g.drawImage(p.getImage(), x, y, p.getImage().getWidth() / 6, p
+				.getImage().getHeight() / 6, null);
 		paintEnemy(g);
 
 	}
 
-	public void startMeteor() {
+	public void startEnemy() {
 		for (int i = 0; i < 3; i++) {
 			int xm = (int) (Math.random() * 750);
-			m.add(new Meteor(xm, -600));
+			enemy.add(new Enemy(xm, -300));
 		}
 	}
 
+
 	public void paintEnemy(Graphics g) {
-		for (int i = 0; i < m.size(); i++) {
-			g.drawImage(enemy, m.get(i).getX(), m.get(i).getY(), enemy.getWidth(null) / 2, enemy.getHeight(null) / 2,
-					this);
+		for (int i = 0; i < enemy.size(); i++) {
+			g.drawImage(enemy.get(i).getIcon(), enemy.get(i).getX(),
+					enemy.get(i).getY(),
+					enemy.get(i).getIcon().getWidth(null) / 2, enemy.get(i)
+							.getIcon().getHeight(null) / 2, this);
 		}
 	}
 
@@ -103,14 +96,14 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void left() {
-		if (x - (image.getWidth() / 6) + 90 < 0) {
+		if (x - (p.getImage().getWidth() / 6) + 90 < 0) {
 		} else {
 			x += -1.5 * velx;
 		}
 	}
 
 	public void right() {
-		if (x + (image.getWidth() / 6) + 30 > 800) {
+		if (x + (p.getImage().getWidth() / 6) + 30 > 800) {
 		} else {
 			x += +1.5 * velx;
 		}
@@ -124,14 +117,14 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		if (code == KeyEvent.VK_RIGHT) {
 			right();
 			if (dash == true) {
-				x+= 50;
+				x += 50;
 				dash = false;
 			}
 		}
 		if (code == KeyEvent.VK_LEFT) {
 			left();
 			if (dash == true) {
-				x+= -50;
+				x += -50;
 				dash = false;
 			}
 		}
