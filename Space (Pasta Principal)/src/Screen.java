@@ -2,11 +2,8 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.awt.event.*;
-import java.util.Random;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -45,9 +42,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		};
 		new Timer(delay, taskPerformer).start();
 
-		int delay2 = 1000;
+		int delay2 = 6000;
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				clEnemy();
 				startEnemy();
 			}
 		};
@@ -76,14 +74,18 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			enemy.add(new Enemy(xm, -300));
 		}
 	}
+	public void clEnemy() {
+		enemy.clear();
+		ym = -300;
+	}
 
 
 	public void paintEnemy(Graphics g) {
 		for (int i = 0; i < enemy.size(); i++) {
 			g.drawImage(enemy.get(i).getIcon(), enemy.get(i).getX(),
 					enemy.get(i).getY(),
-					enemy.get(i).getIcon().getWidth(null) / 2, enemy.get(i)
-							.getIcon().getHeight(null) / 2, this);
+					enemy.get(i).getIcon().getWidth(null) / 6, enemy.get(i)
+							.getIcon().getHeight(null) / 6, this);
 		}
 	}
 
