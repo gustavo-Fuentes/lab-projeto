@@ -6,7 +6,6 @@ Prioridades:
 
 * 2 - Disparo, Player destruirá uma Entity (Enemy -> Enemy2 -> Destruido).
 
-* 3 - Adicionar 'cooldown' para o dash (Muito overpower no momento).
-
 Adicional:
 * Movimentação fluida
+* Adicionar 'cooldown' para o dash (Muito overpower no momento).
