@@ -11,10 +11,11 @@ import javax.swing.JPanel;
 public class Screen extends JPanel implements KeyListener, ActionListener {
 	private BufferedImage background;
 	int x = 340;
-	double velx = 25;
 	int y = 440;
 	int ym = -300;
-	boolean dash = false;
+	int xs = 0;
+	boolean condition = false;
+	boolean cd = false;
 	ArrayList<Enemy> enemy = new ArrayList<>();
 	Player p = new Player(x, y);
 
@@ -62,8 +63,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(background, 0, 0, null);
-		g.drawImage(p.getImage(), x, y, p.getImage().getWidth() / 6, p
-				.getImage().getHeight() / 6, null);
+		p.draw(g);
+		if (condition == true) {
+			p.shoot(g,xs);	
+		}
 		paintEnemy(g);
 
 	}
@@ -95,39 +98,41 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 
 	public void movimento() {
 		ym += 1;
-	}
-
-	public void left() {
-		if (x - (p.getImage().getWidth() / 6) + 90 < 0) {
-		} else {
-			x += -1.5 * velx;
-		}
-	}
-
-	public void right() {
-		if (x + (p.getImage().getWidth() / 6) + 30 > 800) {
-		} else {
-			x += +1.5 * velx;
+		if (condition==true) {
+			p.setYs(p.getYs()-5);
+			if (p.getYs()==-200) {
+				condition = false;
+				p.setYs(p.getY()-60);
+				cd = false;
+			}
 		}
 	}
 
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
 		if (code == KeyEvent.VK_SHIFT) {
-			dash = true;
+			p.setDash(true);
 		}
+		if (code == KeyEvent.VK_SPACE) {
+			condition = true;
+			if(cd == false) {
+				xs = p.getX();
+				cd = true;
+			}	
+		}
+
 		if (code == KeyEvent.VK_RIGHT) {
-			right();
-			if (dash == true) {
-				x += 50;
-				dash = false;
+			p.right();
+			if (p.isDash() == true) {
+				p.dash(0);
+				p.setDash(false);
 			}
 		}
 		if (code == KeyEvent.VK_LEFT) {
-			left();
-			if (dash == true) {
-				x += -50;
-				dash = false;
+			p.left();
+			if (p.isDash() == true) {
+				p.dash(1);
+				p.setDash(false);
 			}
 		}
 
@@ -138,4 +143,5 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 
 	public void keyReleased(KeyEvent e) {
 	}
+
 }
