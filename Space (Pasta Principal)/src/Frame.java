@@ -1,8 +1,7 @@
 import javax.swing.JFrame;
 
 
-import javax.imageio.ImageIO;
-
+@SuppressWarnings("serial")
 public class Frame extends JFrame {
 	Screen s;
 	JFrame f;
@@ -20,7 +19,7 @@ public class Frame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		Frame x = new Frame();
+		new Frame();
 	}
 
 }

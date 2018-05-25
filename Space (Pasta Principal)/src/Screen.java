@@ -5,9 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.*;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Screen extends JPanel implements KeyListener, ActionListener {
 	private BufferedImage background;
 	int x = 340;
