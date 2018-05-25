@@ -109,10 +109,19 @@ public class Player extends Entity implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 	}
 
+	public int getXs() {
+		return xs;
+	}
+
+	public void setXs(int xs) {
+		this.xs = xs;
+	}
+
 	private BufferedImage image;
 	private BufferedImage image2;
 	private double velx = 25;
 	private boolean dash;
+	private int xs;
 	private int ys = 380;
 	boolean colisao = false;
 

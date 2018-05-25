@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -18,6 +19,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	int xs = 0;
 	boolean condition = false;
 	boolean cd = false;
+	boolean end = false;
 	ArrayList<Entity> enemy = new ArrayList<>();
 	Player p = new Player(x, y);
 
@@ -37,11 +39,12 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		int delay = 5; // milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				recalcula();
-				collision();
-				movimento();
-				repaint();
-
+				if(end==false){	
+					recalcula();
+					collision();
+					movimento();
+					repaint();
+				}
 			}
 		};
 		new Timer(delay, taskPerformer).start();
@@ -49,8 +52,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		int delay2 = 6000;
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				clEnemy();
-				startEnemy();
+				if(end == false)	{
+					clEnemy();
+					startEnemy();
+				}
 			}
 		};
 		new Timer(delay2, taskPerformer1).start();
@@ -65,13 +70,17 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 
 	void collision() {
 		for (int i = 0; i < enemy.size(); i++) {
-			if (p.getX() == enemy.get(i).getX()
-					& p.getY() == enemy.get(i).getY()) {
+			if (p.getX() == enemy.get(i).getX() | p.getY() == enemy.get(i).getY()) {
+				p.setColisao(true);
+				end = true;
+				clEnemy();
+				
 				try {
 					background = ImageIO.read(getClass().getResourceAsStream(
 							"/GameOver.png"));
 				} catch (IOException e) {
 					e.printStackTrace();
+				
 				}
 			}
 		}
