@@ -16,7 +16,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	int xs = 0;
 	boolean condition = false;
 	boolean cd = false;
-	ArrayList<Enemy> enemy = new ArrayList<>();
+	ArrayList<Entity> enemy = new ArrayList<>();
 	Player p = new Player(x, y);
 
 	public Screen() {
@@ -32,13 +32,14 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			e.printStackTrace();
 		}
 
-		
 		int delay = 5; // milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				recalcula();
-				repaint();
+				collision();
 				movimento();
+				repaint();
+
 			}
 		};
 		new Timer(delay, taskPerformer).start();
@@ -60,12 +61,26 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	void collision() {
+		for (int i = 0; i < enemy.size(); i++) {
+			if (p.getX() == enemy.get(i).getX()
+					& p.getY() == enemy.get(i).getY()) {
+				try {
+					background = ImageIO.read(getClass().getResourceAsStream(
+							"/GameOver.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(background, 0, 0, null);
 		p.draw(g);
 		if (condition == true) {
-			p.shoot(g,xs);	
+			p.shoot(g, xs);
 		}
 		paintEnemy(g);
 
@@ -77,17 +92,17 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			enemy.add(new Enemy(xm, -300));
 		}
 	}
+
 	public void clEnemy() {
 		enemy.clear();
 		ym = -300;
 	}
 
-
 	public void paintEnemy(Graphics g) {
 		for (int i = 0; i < enemy.size(); i++) {
-			g.drawImage(enemy.get(i).getIcon(), enemy.get(i).getX(),
-					enemy.get(i).getY(),
-					enemy.get(i).getIcon().getWidth(null) / 6, enemy.get(i)
+			g.drawImage(((Enemy) enemy.get(i)).getIcon(), enemy.get(i).getX(),
+					enemy.get(i).getY(), ((Enemy) enemy.get(i)).getIcon()
+							.getWidth(null) / 6, ((Enemy) enemy.get(i))
 							.getIcon().getHeight(null) / 6, this);
 		}
 	}
@@ -98,11 +113,11 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 
 	public void movimento() {
 		ym += 1;
-		if (condition==true) {
-			p.setYs(p.getYs()-5);
-			if (p.getYs()==-200) {
+		if (condition == true) {
+			p.setYs(p.getYs() - 5);
+			if (p.getYs() == -200) {
 				condition = false;
-				p.setYs(p.getY()-60);
+				p.setYs(p.getY() - 60);
 				cd = false;
 			}
 		}
@@ -115,10 +130,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		}
 		if (code == KeyEvent.VK_SPACE) {
 			condition = true;
-			if(cd == false) {
+			if (cd == false) {
 				xs = p.getX();
 				cd = true;
-			}	
+			}
 		}
 
 		if (code == KeyEvent.VK_RIGHT) {

@@ -11,11 +11,17 @@ import javax.imageio.ImageIO;
 public class Player extends Entity implements ActionListener {
 	public Player(int x, int y) {
 		super(x, y);
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/Nave.png"));
-		} catch (IOException e) {
+		try{
+			if(colisao == false){
+				image = ImageIO.read(getClass().getResourceAsStream("/Nave.png"));
+			}
+			else{
+				image = null;
+			}
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		try {
 			image2 = ImageIO.read(getClass().getResourceAsStream("/Green_laser.png"));
 		} catch (IOException e) {
@@ -92,6 +98,14 @@ public class Player extends Entity implements ActionListener {
 	public void setDash(boolean dash) {
 		this.dash = dash;
 	}
+	
+	public boolean isColisao() {
+		return colisao;
+	}
+
+	public void setColisao(boolean colisao) {
+		this.colisao = colisao;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -102,5 +116,6 @@ public class Player extends Entity implements ActionListener {
 	private double velx = 25;
 	private boolean dash;
 	private int ys = 380;
+	boolean colisao = false;
 
 }

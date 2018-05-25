@@ -16,7 +16,7 @@ public class Enemy extends Entity {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Image getIcon() {
 		return icon;
 	}

@@ -1,3 +1,6 @@
+import java.awt.Image;
+import java.awt.Rectangle;
+
 public class Entity {
 	public Entity(int x, int y) {
 		this.x = x;
@@ -19,7 +22,15 @@ public class Entity {
 	public void setY(int y) {
 		this.y = y;
 	}
+	public Rectangle getImageBound() {
+		return imageBound;
+	}
 
+	public void setImageBound(Rectangle imageBound) {
+		this.imageBound = imageBound;
+	}
+	
 	protected int x;
 	protected int y;
+	protected Rectangle imageBound;
 }
