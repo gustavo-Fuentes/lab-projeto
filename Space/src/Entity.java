@@ -1,44 +1,61 @@
-import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-
-public class Entity {
-	public Entity(int x,int y) {
+public abstract class Entity {
+	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
-	}
-
-	public Entity(int x, int y, BufferedImage image) {
-		this.x = x;
-		this.y = y;
-		Entity.image = image;
-	}
-
-	public Entity(int x, int y, Image img) {
-		this.x = x;
-		this.y = y;
-		this.img = img;
 	}
 
 	public int getX() {
 		return x;
 	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
 	public int getY() {
 		return y;
 	}
-	
+
 	public void setY(int y) {
 		this.y = y;
 	}
+
+	public Rectangle getImageBound() {
+		return imageBound;
+	}
+
+	public void setImageBound(Rectangle imageBound) {
+		this.imageBound = imageBound;
+	}
+
+	public abstract void movimento();
+
+	public abstract void draw(Graphics g, Screen s);
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	boolean colidiu(Entity e) {
+		return Math.sqrt((e.x * e.x - this.x * this.x)
+				+ (e.y * e.y - this.y * this.y)) < 10;
+	}
+	
 	public BufferedImage getImage() {
 		return image;
 	}
-	public Image getImg() {
-		return img;
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
 	}
-	
+
 	protected int x;
 	protected int y;
-	protected static BufferedImage image;
-	protected Image img;
+	protected Rectangle imageBound;
+	protected BufferedImage image;
+
 }
