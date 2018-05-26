@@ -5,8 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -22,6 +20,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	boolean end = false;
 	ArrayList<Entity> enemy = new ArrayList<>();
 	Player p = new Player(x, y);
+	Tiro tiro = new Tiro(x,y);
 
 	public Screen() {
 
@@ -29,6 +28,8 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
+		enemy.add(p);
+
 		try {
 			background = ImageIO.read(getClass().getResourceAsStream(
 					"/spicy_background.jpg"));
@@ -39,9 +40,9 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		int delay = 5; // milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(end==false){	
+				if (end == false) {
 					recalcula();
-					collision();
+					//collision();
 					movimento();
 					repaint();
 				}
@@ -49,12 +50,13 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		};
 		new Timer(delay, taskPerformer).start();
 
-		int delay2 = 6000;
+		int delay2 = 10000;
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(end == false)	{
+				if (end == false) {
 					clEnemy();
 					startEnemy();
+					enemy.add(p);
 				}
 			}
 		};
@@ -63,25 +65,17 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	}
 
 	void recalcula() {
-		for (int i = 0; i < enemy.size(); i++) {
-			enemy.get(i).setY(ym);
-		}
 	}
 
 	void collision() {
-		for (int i = 0; i < enemy.size(); i++) {
-			if (p.getX() == enemy.get(i).getX() | p.getY() == enemy.get(i).getY()) {
-				p.setColisao(true);
-				end = true;
-				clEnemy();
-				
-				try {
-					background = ImageIO.read(getClass().getResourceAsStream(
-							"/GameOver.png"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				
+		for(int i=0; i<enemy.size();i++){
+			if(tiro.colidiu(enemy.get(i))== true){
+				if(tiro.getImage() == p.getImage()){	
+				}else{
+					enemy.remove(i);
 				}
+				
+				
 			}
 		}
 	}
@@ -89,11 +83,13 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(background, 0, 0, null);
-		p.draw(g);
-		if (condition == true) {
-			p.shoot(g, xs);
+		for (Entity e : enemy) {
+			e.draw(g, this);
 		}
-		paintEnemy(g);
+
+		if (condition == true) {
+			tiro.draw(g,this);
+		}
 
 	}
 
@@ -109,26 +105,20 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		ym = -300;
 	}
 
-	public void paintEnemy(Graphics g) {
-		for (int i = 0; i < enemy.size(); i++) {
-			g.drawImage(((Enemy) enemy.get(i)).getIcon(), enemy.get(i).getX(),
-					enemy.get(i).getY(), ((Enemy) enemy.get(i)).getIcon()
-							.getWidth(null) / 6, ((Enemy) enemy.get(i))
-							.getIcon().getHeight(null) / 6, this);
-		}
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 	}
 
 	public void movimento() {
-		ym += 1;
+		for (Entity e : enemy) {
+			e.movimento();
+		}
+
 		if (condition == true) {
-			p.setYs(p.getYs() - 5);
-			if (p.getYs() == -200) {
+			tiro.setY(tiro.getY() - 10);
+			if (tiro.getY() == -200) {
 				condition = false;
-				p.setYs(p.getY() - 60);
+				tiro.setY(p.getY() - 60);
 				cd = false;
 			}
 		}
@@ -136,32 +126,17 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
-		if (code == KeyEvent.VK_SHIFT) {
-			p.setDash(true);
+		for (Entity en : enemy) {
+			en.keyPressed(e);
 		}
 		if (code == KeyEvent.VK_SPACE) {
 			condition = true;
 			if (cd == false) {
-				xs = p.getX();
+				tiro.setX(p.getX());
+				tiro.setY(p.getY()-30);
 				cd = true;
 			}
 		}
-
-		if (code == KeyEvent.VK_RIGHT) {
-			p.right();
-			if (p.isDash() == true) {
-				p.dash(0);
-				p.setDash(false);
-			}
-		}
-		if (code == KeyEvent.VK_LEFT) {
-			p.left();
-			if (p.isDash() == true) {
-				p.dash(1);
-				p.setDash(false);
-			}
-		}
-
 	}
 
 	public void keyTyped(KeyEvent e) {

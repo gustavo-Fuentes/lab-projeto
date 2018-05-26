@@ -1,15 +1,14 @@
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
 public class Enemy2 extends Enemy {
 
 	public Enemy2(int x, int y) {
 		super(x, y);
-		setUrl(this.getClass().getResource("evilspicy.png"));
 		try {
-			 setIcon(new ImageIcon(url).getImage());
+			image = ImageIO.read(getClass().getResourceAsStream(
+					"/evilspicy.png"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

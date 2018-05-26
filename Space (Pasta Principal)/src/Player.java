@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -33,14 +34,6 @@ public class Player extends Entity implements ActionListener {
 
 	public void setYs(int ys) {
 		this.ys = ys;
-	}
-
-	public BufferedImage getImage() {
-		return image;
-	}
-
-	public void setImage(BufferedImage image) {
-		this.image = image;
 	}
 
 	public BufferedImage getImage2() {
@@ -117,12 +110,44 @@ public class Player extends Entity implements ActionListener {
 		this.xs = xs;
 	}
 
-	private BufferedImage image;
 	private BufferedImage image2;
 	private double velx = 25;
 	private boolean dash;
 	private int xs;
 	private int ys = 380;
 	boolean colisao = false;
+	@Override
+	public void movimento() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int code = e.getKeyCode();
+		if (code == KeyEvent.VK_SHIFT) {
+			this.setDash(true);
+		}
+		
+		if (code == KeyEvent.VK_RIGHT) {
+			this.right();
+			if (this.isDash() == true) {
+				this.dash(0);
+				this.setDash(false);
+			}
+		}
+		if (code == KeyEvent.VK_LEFT) {
+			this.left();
+			if (this.isDash() == true) {
+				this.dash(1);
+				this.setDash(false);
+			}
+		}
+		
+	}
+
+	@Override
+	public void draw(Graphics g, Screen s) {
+		this.draw(g);
+	}
 
 }

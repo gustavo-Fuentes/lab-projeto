@@ -1,37 +1,29 @@
-import java.awt.Image;
-import java.net.URL;
+import java.awt.Graphics;
 
-import javax.swing.ImageIcon;
+
+import javax.imageio.ImageIO;
+
 
 public class Enemy extends Entity {
 	public Enemy(int x, int y) {
 		super(x, y);
-		setUrl(this.getClass().getResource("spicyspace.png"));
 		try {
-			setIcon(new ImageIcon(url).getImage());
+			image = ImageIO.read(getClass().getResourceAsStream("/spicyspace.png"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Image getIcon() {
-		return icon;
+
+	@Override
+	public void movimento() {
+		y += 2;
 	}
 
-	public void setIcon(Image icon) {
-		this.icon = icon;
+	@Override
+	public void draw(Graphics g, Screen s) {
+		g.drawImage(getImage(), getX(), getY(), getImage().getWidth() / 6, getImage().getHeight() / 6, s);
+
 	}
-
-	public URL getUrl() {
-		return url;
-	}
-
-	public void setUrl(URL url) {
-		this.url = url;
-	}
-
-
-	protected URL url;
-	private Image icon;
 
 }
