@@ -23,22 +23,6 @@ public class Player extends Entity implements ActionListener {
 		}
 	}
 
-	public int getYs() {
-		return ys;
-	}
-
-	public void setYs(int ys) {
-		this.ys = ys;
-	}
-
-	public BufferedImage getImage2() {
-		return image2;
-	}
-
-	public void setImage2(BufferedImage image2) {
-		this.image2 = image2;
-	}
-
 	public void left() {
 		if (x - (getImage().getWidth() / 6) + 90 < 0) {
 		} else {
@@ -84,14 +68,6 @@ public class Player extends Entity implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 	}
 
-	public int getXs() {
-		return xs;
-	}
-
-	public void setXs(int xs) {
-		this.xs = xs;
-	}
-
 
 	@Override
 	public void movimento() {
@@ -126,8 +102,7 @@ public class Player extends Entity implements ActionListener {
 	public void draw(Graphics g, Screen s) {
 		this.draw(g);
 	}
-
-	private BufferedImage image2;
+	
 	private double velx = 25;
 	private boolean dash;
 	private int xs;
