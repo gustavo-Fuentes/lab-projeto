@@ -17,7 +17,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	int xs = 0;
 	boolean end = false;
 	boolean reset = false;
-	ArrayList<Entity> enemy = new ArrayList<>();
+	ArrayList<Entity> entity = new ArrayList<>();
 	Player p = new Player(x, y);
 	Tiro tiro = new Tiro(1000,-1000);
 
@@ -27,8 +27,8 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		enemy.add(p);
-		enemy.add(tiro);
+		entity.add(p);
+		entity.add(tiro);
 
 		try {
 			background = ImageIO.read(getClass().getResourceAsStream(
@@ -48,7 +48,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 					repaint();
 				}
 				else {
-					enemy.clear();
+					entity.clear();
 					try {
 						background = ImageIO.read(getClass().getResourceAsStream(
 								"/GameOver.png"));
@@ -58,10 +58,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 					}
 					if (reset == true) {
 						
-						enemy.clear();
+						entity.clear();
 						startEnemy();
-						enemy.add(p);
-						enemy.add(tiro);
+						entity.add(p);
+						entity.add(tiro);
 						try {
 							background = ImageIO.read(getClass().getResourceAsStream(
 									"/spicy_background.jpg"));
@@ -84,10 +84,10 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (end == false) {
-					enemy.clear();
+					entity.clear();
 					startEnemy();
-					enemy.add(p);
-					enemy.add(tiro);
+					entity.add(p);
+					entity.add(tiro);
 				}
 				
 			}
@@ -97,20 +97,20 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	}
 
 	void clear() {
-		for(int i=0; i<enemy.size();i++) {
-			if(enemy.get(i).getY()> 600) {
-				enemy.clear();
-				enemy.add(p);
-				enemy.add(tiro);
+		for(int i=0; i<entity.size();i++) {
+			if(entity.get(i).getY()> 600) {
+				entity.clear();
+				entity.add(p);
+				entity.add(tiro);
 			}
 		}
 	}
 
 	void collision() {
 			
-		for(int i=0; i<enemy.size();i++){
-			if(p.colidiu(enemy.get(i))== true){
-				if(enemy.get(i).getId() < 2){	
+		for(int i=0; i<entity.size();i++){
+			if(p.colidiu(entity.get(i))== true){
+				if(entity.get(i).getId() < 2){	
 				}else{
 					end = true;
 				}
@@ -119,11 +119,11 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			}
 		}
 		
-		for(int i=0; i<enemy.size();i++){
-			if(tiro.colidiu(enemy.get(i))== true){
-				if(enemy.get(i).getId() < 2){	
+		for(int i=0; i<entity.size();i++){
+			if(tiro.colidiu(entity.get(i))== true){
+				if(entity.get(i).getId() < 2){	
 				}else{
-					enemy.remove(i);
+					entity.remove(i);
 				
 				}
 				
@@ -135,7 +135,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(background, 0, 0, null);
-		for (Entity e : enemy) {
+		for (Entity e : entity) {
 			e.draw(g, this);
 		}
 
@@ -144,7 +144,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	public void startEnemy() {
 		for (int i = 0; i < 3; i++) {
 			int xm = (int) (Math.random() * 750);
-			enemy.add(new Enemy(xm, -300, i+2));
+			entity.add(new Enemy(xm, -300, i+2));
 		}
 	}
 
@@ -153,14 +153,14 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void movimento() {
-		for (Entity e : enemy) {
+		for (Entity e : entity) {
 			e.movimento();
 		}
 
 	}
 
 	public void keyPressed(KeyEvent e) {
-		for (Entity en : enemy) {
+		for (Entity en : entity) {
 			en.keyPressed(e,p);
 		}
 		int code = e.getKeyCode();
