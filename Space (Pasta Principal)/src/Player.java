@@ -9,18 +9,13 @@ import javax.imageio.ImageIO;
 
 public class Player extends Entity implements ActionListener {
 	public Player(int x, int y) {
-		super(x, y);
-		try{
-			if(colisao == false){
-				image = ImageIO.read(getClass().getResourceAsStream("/Nave.png"));
-			}
-			else{
-				image = null;
-			}
-		}catch (IOException e) {
+		super(x, y, 0);
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream("/Nave.png"));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			image2 = ImageIO.read(getClass().getResourceAsStream("/Green_laser.png"));
 		} catch (IOException e) {
@@ -57,7 +52,7 @@ public class Player extends Entity implements ActionListener {
 			x += +1.5 * velx;
 		}
 	}
-	
+
 	public void dash(int direction) {
 		if (direction == 0) {
 			if (x + (getImage().getWidth() / 6) + 30 > 800) {
@@ -65,7 +60,7 @@ public class Player extends Entity implements ActionListener {
 				x += 50;
 			}
 		}
-		if (direction == 1)	{
+		if (direction == 1) {
 			if (x - (getImage().getWidth() / 6) + 90 < 0) {
 			} else {
 				x += -50;
@@ -77,25 +72,12 @@ public class Player extends Entity implements ActionListener {
 		g.drawImage(getImage(), x, y, getImage().getWidth() / 6, getImage().getHeight() / 6, null);
 	}
 
-	public void shoot(Graphics g, int xs) {
-		g.drawImage(getImage2(), xs, ys, getImage2().getWidth() / 6, getImage().getHeight() / 6, null);
-		g.drawImage(getImage2(), xs+80, ys, getImage2().getWidth() / 6, getImage().getHeight() / 6, null);
-	}
-
 	public boolean isDash() {
 		return dash;
 	}
 
 	public void setDash(boolean dash) {
 		this.dash = dash;
-	}
-	
-	public boolean isColisao() {
-		return colisao;
-	}
-
-	public void setColisao(boolean colisao) {
-		this.colisao = colisao;
 	}
 
 	@Override
@@ -110,24 +92,19 @@ public class Player extends Entity implements ActionListener {
 		this.xs = xs;
 	}
 
-	private BufferedImage image2;
-	private double velx = 25;
-	private boolean dash;
-	private int xs;
-	private int ys = 380;
-	boolean colisao = false;
+
 	@Override
 	public void movimento() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e, Player p) {
 		int code = e.getKeyCode();
 		if (code == KeyEvent.VK_SHIFT) {
 			this.setDash(true);
 		}
-		
+
 		if (code == KeyEvent.VK_RIGHT) {
 			this.right();
 			if (this.isDash() == true) {
@@ -142,12 +119,18 @@ public class Player extends Entity implements ActionListener {
 				this.setDash(false);
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void draw(Graphics g, Screen s) {
 		this.draw(g);
 	}
+
+	private BufferedImage image2;
+	private double velx = 25;
+	private boolean dash;
+	private int xs;
+	private int ys = 380;
 
 }

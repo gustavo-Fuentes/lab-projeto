@@ -5,8 +5,8 @@ import javax.imageio.ImageIO;
 
 
 public class Enemy extends Entity {
-	public Enemy(int x, int y) {
-		super(x, y);
+	public Enemy(int x, int y, int id) {
+		super(x, y, id);
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/spicyspace.png"));
 		} catch (Exception e) {

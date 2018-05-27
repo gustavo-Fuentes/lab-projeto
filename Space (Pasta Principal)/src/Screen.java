@@ -15,12 +15,11 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 	int y = 440;
 	int ym = -300;
 	int xs = 0;
-	boolean condition = false;
-	boolean cd = false;
 	boolean end = false;
+	boolean reset = false;
 	ArrayList<Entity> enemy = new ArrayList<>();
 	Player p = new Player(x, y);
-	Tiro tiro = new Tiro(x,y);
+	Tiro tiro = new Tiro(1000,-1000);
 
 	public Screen() {
 
@@ -29,6 +28,7 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		enemy.add(p);
+		enemy.add(tiro);
 
 		try {
 			background = ImageIO.read(getClass().getResourceAsStream(
@@ -40,39 +40,91 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 		int delay = 5; // milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				
 				if (end == false) {
-					recalcula();
-					//collision();
+					clear();
+					collision();
 					movimento();
 					repaint();
+				}
+				else {
+					enemy.clear();
+					try {
+						background = ImageIO.read(getClass().getResourceAsStream(
+								"/GameOver.png"));
+						repaint();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					if (reset == true) {
+						
+						enemy.clear();
+						startEnemy();
+						enemy.add(p);
+						enemy.add(tiro);
+						try {
+							background = ImageIO.read(getClass().getResourceAsStream(
+									"/spicy_background.jpg"));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						repaint();
+						end = false;
+						reset = false;
+						
+					}
+					
 				}
 			}
 		};
 		new Timer(delay, taskPerformer).start();
 
-		int delay2 = 10000;
+		int delay2 = 6000;
 		ActionListener taskPerformer1 = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (end == false) {
-					clEnemy();
+					enemy.clear();
 					startEnemy();
 					enemy.add(p);
+					enemy.add(tiro);
 				}
+				
 			}
 		};
 		new Timer(delay2, taskPerformer1).start();
 
 	}
 
-	void recalcula() {
+	void clear() {
+		for(int i=0; i<enemy.size();i++) {
+			if(enemy.get(i).getY()> 600) {
+				enemy.clear();
+				enemy.add(p);
+				enemy.add(tiro);
+			}
+		}
 	}
 
 	void collision() {
+			
+		for(int i=0; i<enemy.size();i++){
+			if(p.colidiu(enemy.get(i))== true){
+				if(enemy.get(i).getId() < 2){	
+				}else{
+					end = true;
+				}
+				
+				
+			}
+		}
+		
 		for(int i=0; i<enemy.size();i++){
 			if(tiro.colidiu(enemy.get(i))== true){
-				if(tiro.getImage() == p.getImage()){	
+				if(enemy.get(i).getId() < 2){	
 				}else{
 					enemy.remove(i);
+				
 				}
 				
 				
@@ -87,22 +139,13 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			e.draw(g, this);
 		}
 
-		if (condition == true) {
-			tiro.draw(g,this);
-		}
-
 	}
 
 	public void startEnemy() {
 		for (int i = 0; i < 3; i++) {
 			int xm = (int) (Math.random() * 750);
-			enemy.add(new Enemy(xm, -300));
+			enemy.add(new Enemy(xm, -300, i+2));
 		}
-	}
-
-	public void clEnemy() {
-		enemy.clear();
-		ym = -300;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -114,29 +157,21 @@ public class Screen extends JPanel implements KeyListener, ActionListener {
 			e.movimento();
 		}
 
-		if (condition == true) {
-			tiro.setY(tiro.getY() - 10);
-			if (tiro.getY() == -200) {
-				condition = false;
-				tiro.setY(p.getY() - 60);
-				cd = false;
-			}
-		}
 	}
 
 	public void keyPressed(KeyEvent e) {
-		int code = e.getKeyCode();
 		for (Entity en : enemy) {
-			en.keyPressed(e);
+			en.keyPressed(e,p);
 		}
-		if (code == KeyEvent.VK_SPACE) {
-			condition = true;
-			if (cd == false) {
-				tiro.setX(p.getX());
-				tiro.setY(p.getY()-30);
-				cd = true;
+		int code = e.getKeyCode();
+		if (code == KeyEvent.VK_R) {
+			if(end == true) {
+				reset = true;
 			}
+			
+				
 		}
+		
 	}
 
 	public void keyTyped(KeyEvent e) {

@@ -1,12 +1,12 @@
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
-	public Entity(int x, int y) {
+	public Entity(int x, int y, int id) {
 		this.x = x;
 		this.y = y;
+		this.id = id;
 	}
 
 	public int getX() {
@@ -25,26 +25,34 @@ public abstract class Entity {
 		this.y = y;
 	}
 
-	public Rectangle getImageBound() {
-		return imageBound;
+	public int getId() {
+		return id;
 	}
 
-	public void setImageBound(Rectangle imageBound) {
-		this.imageBound = imageBound;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public abstract void movimento();
 
 	public abstract void draw(Graphics g, Screen s);
 
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e, Player p) {
 	}
 
+	/*
+	 * boolean colidiu(Entity e) { return Math.sqrt((e.x * e.x - this.x * this.x) +
+	 * (e.y * e.y - this.y * this.y)) < 10; }
+	 */
+
 	boolean colidiu(Entity e) {
-		return Math.sqrt((e.x * e.x - this.x * this.x)
-				+ (e.y * e.y - this.y * this.y)) < 10;
+		if (e.x <= this.x+this.getImage().getWidth()/6 & e.x+e.getImage().getWidth()/6 >= this.x & e.y+e.getImage().getHeight()/6 >= this.y)
+			return true;
+		else
+			return false;
+
 	}
-	
+
 	public BufferedImage getImage() {
 		return image;
 	}
@@ -55,7 +63,7 @@ public abstract class Entity {
 
 	protected int x;
 	protected int y;
-	protected Rectangle imageBound;
+	protected int id;
 	protected BufferedImage image;
 
 }
