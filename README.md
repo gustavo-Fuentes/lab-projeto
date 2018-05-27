@@ -1,11 +1,10 @@
 # lab-projeto
 
-Prioridades:
+Como jogar: 
 
-* 1 - Colisão, Enemy destruirá Player.
+* Setas esquerda e direita para mover a nave.
+* Barra de espaço para atirar
+* Shift ativa uma instância de dash
+* R para resetar após o Game Over
 
-* 2 - Disparo, Player destruirá uma Entity (Enemy -> Enemy2 -> Destruido).
 
-Adicional:
-* Movimentação fluida
-* Adicionar 'cooldown' para o dash (Muito overpower no momento).
